@@ -1,13 +1,16 @@
 const { Thought, User } = require('../models');
 const { ObjectId } = require('mongoose').Types;
 
+// Thoughts API
 module.exports = {
+    // Helps GET thoughts
     getThoughts(req, res) {
         Thought.find()
             .then((thoughts) => res.json(thoughts))
             .catch((error) => res.status(500).json(error));
     },
 
+    // Helps GET single thought
     getSingleThought(req, res) {
         Thought.findOne({ _id: req.params.thoughtId })
             .select('-__v')
@@ -19,6 +22,7 @@ module.exports = {
             .catch((error) => res.status(500).json(error));
     },
 
+    // Helps CREATE thought
     createThought(req, res) {
         Thought.create(req.body)
             .then((thought) => {
@@ -28,6 +32,7 @@ module.exports = {
             .catch((error) => res.status(500).json(error));
     },
 
+    //
     addReaction(req, res) {
         Thought.findOneAndUpdate({ _id: req.params.thoughtId }, { $addToSet: { reactions: req.body } }, { runValidators: true, new: true })
             .then((thought) =>
@@ -38,6 +43,7 @@ module.exports = {
             .catch((error) => res.status(500).json(error));
     },
 
+    // PUT a thought
     updateThought(req, res) {
         Thought.findOneAndUpdate({ _id: req.params.thoughtId }, { $set: req.body }, { runValidators: true, new: true })
             .then((thought) =>
@@ -47,7 +53,8 @@ module.exports = {
             )
             .catch((error) => res.status(500).json(error));
     },
-
+    
+    //Will DELETE the thought
     deleteThought(req, res) {
         Thought.findOneAndDelete({ _id: req.params.thoughtId })
             .then((deletedThought) => {
